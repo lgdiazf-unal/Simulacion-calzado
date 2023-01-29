@@ -12,8 +12,6 @@ path_plantilla = "./data/plantilla_gen.csv"
 path_modelos = "modelos/ppo_indice_4"
 path_logs = "logs"
 
-path_modelo = "./cnn/modelos/red.npy"
-
 if not os.path.exists(path_modelos):
     os.makedirs(path_modelos)
 
