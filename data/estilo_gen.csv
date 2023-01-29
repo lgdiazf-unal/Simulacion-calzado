@@ -1,0 +1,5 @@
+id_estilo,media_corte,desv_corte,media_guarnicion,desv_guarnicion,media_zapato,desv_zapato,media_cuero,desv_cuero,id_suela,id_plantilla,id_cuero
+1,29.5,5.2,67.4,4.5,64,3.2,4,0.3,1,1,1
+2,33,3.5,73,6.8,76,3.8,5,0.6,2,1,2
+3,37,3.6,83.46,7.4,88.5,5.2,5,0.6,1,2,3
+4,43,4.2,89.3,3.7,98.5,7,4,0.3,2,2,4
