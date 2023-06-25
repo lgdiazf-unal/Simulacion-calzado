@@ -8,13 +8,11 @@ from .estado import Estado
 class Calzado():
 
 
-  def __init__(self,env,df_metricas,df_estado,df_estilo,pipe,estado={}):
+  def __init__(self,env,df_metricas,df_estado,df_finalizados,df_estilo,pipe,estado={}):
 
     self.env = env
-
-    self.historial = [[self.env.now,0]]
-
     self.df_estilo = df_estilo 
+    self.df_finalizados = df_finalizados
 
     self.pipe = pipe
     self.estado = estado
@@ -44,14 +42,23 @@ class Calzado():
 
     with self.zapateros.request() as req: 
       yield req
+      tiempo_par = tiempo/cantidad
+
+      tiempo_inicio_proceso = self.env.now
+
+      arreglo_id = [id for i in range(cantidad)]
+      arreglo_tiempo  = [ (tiempo_inicio_proceso +  ((i)*tiempo_par))  for i in range(cantidad)  ]
+
+      df_tmp_fin = pd.DataFrame(
+        {
+          "id_orden"  : arreglo_id,
+          "tiempo" : arreglo_tiempo 
+        }
+      )
+      self.df_finalizados = self.df_finalizados.append(df_tmp_fin)
       
+
       yield self.env.timeout(tiempo)
-
-      self.historial.append([self.env.now/60,self.historial[-1][1]+cantidad])
-
-      print(self.historial)
-
-
 
       fin = self.env.now
       df_tmp = pd.DataFrame({"tipo" : [5] , "id" :id, "inicio" : [inicio], "fin" : [fin] , "tiempo_proceso" : [tiempo] })
@@ -59,10 +66,6 @@ class Calzado():
     if self.estado != {}:
       data_estado = (5,len(self.zapateros.queue))
       self.estado.put(data_estado)
-
-
-
-
   
   def iniciar_calzado(self):
 

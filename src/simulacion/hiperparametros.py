@@ -2,9 +2,9 @@ class Hiperparametros():
   # General
   intervalo_cambio_orden = 1
   # Guarnicion
-  cantidad_gurnecedores = 1
+  cantidad_gurnecedores = 20
   # Corte
-  cantidad_cortadores = 1
+  cantidad_cortadores = 20
   # intervalo entre corte y corte
   intervalo_corte = 1 
   # datos para calcular el area de la lamina de cuero
@@ -16,6 +16,6 @@ class Hiperparametros():
   # Plantilla
   cantidad_lineas_produccion_plantilla = 100
   # calzado
-  cantidad_zapateros = 100
+  cantidad_zapateros = 20
   # Semilla random
   semilla = 42

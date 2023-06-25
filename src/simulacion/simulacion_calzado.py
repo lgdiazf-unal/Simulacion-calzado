@@ -41,6 +41,10 @@ class Simulacion_calzado():
     self.df_estado["plantilla"] = []
     self.df_estado["zapato"] = []
 
+    self.df_finalizados = pd.DataFrame()
+    self.df_estado["tiempo"] = []
+    self.df_estado["id_orden"] = []
+
 
     self.pipe = simpy.Store(self.env)
     self.estado =  simpy.Store(self.env)
@@ -55,7 +59,7 @@ class Simulacion_calzado():
         Corte_Guarnicion(self.env,self.orden_corte,self.df_metricas,self.df_estado,self.pipe,self.estado),
         Suela_Plantilla(self.env,self.orden_suela,2,self.capacidad_suela,self.df_metricas,self.df_estado,self.pipe,self.estado),
         Suela_Plantilla(self.env,self.orden_plantilla,3,self.capacidad_plantilla,self.df_metricas,self.df_estado,self.pipe,self.estado),
-        Calzado(self.env,self.df_metricas,self.df_estado,self.df_estilo,self.pipe,self.estado)
+        Calzado(self.env,self.df_metricas,self.df_estado,self.df_finalizados,self.df_estilo,self.pipe,self.estado)
     ]
     _ = [actividad.agregar_simulacion() for actividad in actividades]
 
@@ -65,6 +69,9 @@ class Simulacion_calzado():
 
     self.tiempo_colas = sum([actividad.tiempo_colas for actividad in actividades])
     self.tiempo_proceso = sum([actividad.tiempo_proceso for actividad in actividades])
+
+    # cargar df_finalizado del proceso de calzado (el ulitmo proceso)
+    self.df_finalizados = actividades[-1].df_finalizados
 
 
     _ = list(map(self.agregar_metricas,actividades))

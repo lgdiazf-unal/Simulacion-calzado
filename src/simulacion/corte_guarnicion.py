@@ -88,15 +88,19 @@ class Corte_Guarnicion():
 
   def generador_cortador(self,corte):
 
-    inicio_tiempo_cola = self.env.now 
+    
     
 
     if self.estado !={}:
       data_corte = (1,len(self.cortadores.queue))
       self.estado.put(data_corte)
 
+    inicio_tiempo_cola = self.env.now 
+
     with self.cortadores.request() as req: 
+      
       yield req
+      
 
       inicio_proceso = self.env.now
       self.tiempo_colas += (inicio_proceso - inicio_tiempo_cola)
@@ -165,11 +169,12 @@ class Corte_Guarnicion():
 
 
   def generador_guarnicion(self,media_g,desv_g,cantidad,estilo,id_tarea):
-    
-    inicio_tiempo_cola = self.env.now
 
+    inicio_tiempo_cola = self.env.now
     with self.guarnecedores.request() as req:
+      
       yield req
+      
       fin_tiempo_cola = self.env.now
       self.tiempo_colas += (fin_tiempo_cola  - inicio_tiempo_cola)
 

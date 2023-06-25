@@ -15,7 +15,7 @@ class Estado():
         crea un df temporal y lo agrega al df_estado 
         """
 
-        print(tipo,cantidad) 
+        #print(tipo,cantidad) 
         if tipo == 1:
             self.corte = cantidad
         elif tipo == 2:
