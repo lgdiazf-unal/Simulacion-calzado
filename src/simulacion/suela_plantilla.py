@@ -1,13 +1,18 @@
 import random
 import pandas as pd
 
+"""
+Clase para simular el proceso de las plantillas y suelas
+"""
+
 
 class Suela_Plantilla():
 
-  def __init__(self,env,ordenes,tipo,capacidad,df_metricas,pipe={}):
+  def __init__(self,env,ordenes,tipo,capacidad,df_metricas,df_estado,pipe={},estado={}):
 
     self.env = env
     self.df_metricas = df_metricas
+    self.df_estado = df_estado
     self.ordenes = ordenes 
     self.tipo = tipo
     self.capacidad = capacidad
@@ -16,6 +21,7 @@ class Suela_Plantilla():
     self.tiempo_proceso = 0 
 
     self.pipe = pipe
+    self.estado = estado
   
   def agregar_simulacion(self):
     _ = [
@@ -25,6 +31,10 @@ class Suela_Plantilla():
   def generador_actividad(self,orden):
 
     inicio_tiempo_cola = self.env.now
+
+    if self.estado != {}:
+      data_estado = (self.tipo,len(self.capacidad.queue))
+      self.estado.put(data_estado)
     
     with self.capacidad.request() as req:
 
@@ -56,7 +66,12 @@ class Suela_Plantilla():
 
   
       yield self.env.timeout(tiempo_actividad)
-    
+
+
+      if self.estado != {}:
+        data_estado = (self.tipo,len(self.capacidad.queue))
+        self.estado.put(data_estado)
+      
       fin = self.env.now
 
       self.tiempo_proceso += (fin-fin_tiempo_cola)
@@ -65,7 +80,8 @@ class Suela_Plantilla():
           {"tipo" : [self.tipo] , 
            "id" :[id_actividad], 
            "inicio" : [inicio], 
-           "fin" : [fin] })
+           "fin" : [fin],
+           "tiempo_proceso" : [tiempo_actividad] })
       self.df_metricas = self.df_metricas.append(df_tmp)
 
       if self.pipe != {}:

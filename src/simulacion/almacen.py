@@ -79,6 +79,6 @@ class Almacen():
                 
                 self.eliminar_estilos_vacios(i)
               
-                return (proceso,tiempo_cola) 
-    return (0,0)
+                return (proceso,tiempo_cola,cantidad_solicitada) 
+    return (0,0,0)
 

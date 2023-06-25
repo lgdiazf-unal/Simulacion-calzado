@@ -9,12 +9,16 @@ class Generador_ordenes():
 
   def __init__(self,path_estilo,path_suela,path_plantilla):
 
+
+    # leer datos para los estilos, suelas y plantillas
     self.df_estilo = pd.read_csv(path_estilo)
     self.df_suela = pd.read_csv(path_suela)
     self.df_plantilla = pd.read_csv(path_plantilla)
 
     self.df_completo = []
 
+    # genera un df con todos los datos de media y desviaciones
+    # necesarios para realizar la simulacion para cada estilo
     self.generar_df()
 
     self.orden_corte = []
@@ -28,8 +32,12 @@ class Generador_ordenes():
     self.lim_inf = 18
     self.lim_sup =  20
 
+    # genera un arreglo con tuplas con el id del estilo y
+    # la cantidad para esa actividad en especifico
     self.orden = self.generar_datos()
 
+    # genera la orden de produccion con el arreglo de tuplas
+    # almacenado en self.orden
     self.run()
 
 
@@ -54,20 +62,29 @@ class Generador_ordenes():
     _ = [self.get_orden(orden[0],orden[1]) for orden in self.orden]
 
   def generar_df(self):
+    # copia el df de estilo
     df1_suela=self.df_estilo.copy()  
+    # crea un campo con el id_suela
     df1_suela["tmp_id_suela"]=df1_suela["id_suela"]
+
+    # establece el nombre de las columnas del df de suela
     self.df_suela.columns = ["id","media_suela","desv_suela"]
+    # crea un df realizando el join entre la copia del df de estilo con 
+    # el df de suela
     df_1 = df1_suela.set_index("tmp_id_suela").join(
       self.df_suela.set_index("id"),
       lsuffix="_corte",
       rsuffix="_suela"
     )
 
-
+    # crear una columna con el id de la plantilla
     df_1["tmp_id_plantilla"] = df_1["id_plantilla"]
 
+    # nombre las columnas del df plantilla
     self.df_plantilla.columns = ["id","media_plantilla","desv_plantilla"]
 
+    # hace un join para tener todos los datos de medias y std en un 
+    # solo dataframe
     self.df_completo = df_1.set_index("tmp_id_plantilla").join(
       self.df_plantilla.set_index("id"),
       rsuffix="_plantilla"
