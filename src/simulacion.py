@@ -1,6 +1,6 @@
 import yaml
 from orden import Generador_ordenes
-from simulacion import Simulacion_calzado
+from simulacion import Simulacion_calzado,crear_df_pivote,estadisticos
 import numpy as np
 import pandas as pd
 import math
@@ -10,7 +10,7 @@ from scipy.stats import ttest_ind
 
 jornada = 9.5
 
-
+# leer parametros
 with open('./config/config.yaml','r') as config_file :
     data_config = yaml.safe_load(config_file)
 
@@ -19,13 +19,18 @@ path_suela = data_config["path_suela"]
 path_plantilla = data_config["path_plantilla"]
 
 
+reales = [67.0, 93.0, 86.0, 90.0, 92.0, 85.0, 82.0, 95.0, 90.0, 95.0, 92.0, 83.0, 91.0, 92.0, 93.0, 92.0, 92.0, 85.0, 87.0, 158.0]
+tiempo = []
+datos_iteracion = []
+
+
+# generar orden
 orden =  Generador_ordenes(path_estilo,path_suela,path_plantilla)
 
 # definir ordenes reales
-
 orden_prueba = []
 
-for i in range(1):
+for i in range(230):
     for i in range(4):
         orden_prueba.append((i+1,2))
 
@@ -34,84 +39,10 @@ orden_real_1 = [(1,2),(2,1),(3,2),(4,1)]
 
 orden.actualizar_orden(orden_prueba)
 
-def crear_df_pivote(df,df_orden):
-    df_t = df.copy()
-    df2 = df_t.pivot(index="id",columns='tipo')
-
-    tipos = {
-        1 : "corte",
-        2 : "suela",
-        3 : "plantilla",
-        4 : "guarnicion",
-        5 : "zapato"
-    }
-
-    estados = ["inicio","fin","tiempo_proceso"]
-    orden_columnas = []
-
-    for tipo in tipos:
-        for estado in estados :
-            orden_columnas.append(f"{estado}_{tipos[tipo]}") 
-
-    df2.set_axis(df2.columns.map(lambda x : f"{x[0]}_{tipos[x[1]]}"), axis=1, inplace=True )
-    df2 = df2[orden_columnas]
-
-    df2 = df2.join(df_orden.set_index("id"))
-
-
-    for tipo in tipos :
-        df2[f"proceso_par_{tipos[tipo]}"] = ""
-
-        df2[f"proceso_par_{tipos[tipo]}"] = df2.apply(
-            lambda row : (row[f"tiempo_proceso_{tipos[tipo]}"])/row["cantidad"]
-        ,axis = 1)
-
-
-        df2[f"cola_{tipos[tipo]}"] = ""
-        df2[f"cola_{tipos[tipo]}"] = df2.apply(
-            lambda row : (row[f"fin_{tipos[tipo]}"] - row[f"inicio_{tipos[tipo]}"]  -  row[f"tiempo_proceso_{tipos[tipo]}"])
-        ,axis = 1)
-
-    return df2
-
-
-def estadisticos(df,df_orden):
-    """
-    Funcion que calcula los estadisticos de promedio de proceso
-    """
-    # para cada orden calcular el inicio, fin, tiempo de proceso y tirmpo en cola
-    df_2 = crear_df_pivote(df,df_orden)
-
-    print(df_2[["proceso_par_corte","proceso_par_guarnicion","proceso_par_zapato"]].mean())
-
-    print(df_2[["cola_corte","cola_guarnicion","cola_zapato"]].describe())
-
-    print(df_2[["inicio_corte","fin_corte","tiempo_proceso_corte",
-                "inicio_guarnicion","fin_guarnicion","tiempo_proceso_guarnicion",
-                "inicio_zapato","fin_zapato","tiempo_proceso_zapato"
-                ]])
-    
-    # g = df.groupby("tipo")
-
-    # for i,j in g:
-    #     print(f"tipo : {i} proceso {j['tiempo_proceso'].sum()} maximo {j['fin'].max()}")
-    #     #print(j[["inicio","fin","tiempo_proceso"]].describe())
-
-    # print(f"tarea completa en {df['fin'].max()/60} horas ")
-
-
 
 def evaluar_simulacion(datos_reales,datos_simulacion):
-
     print(ttest_ind(datos_reales, datos_simulacion))
     
-
-reales = [67.0, 93.0, 86.0, 90.0, 92.0, 85.0, 82.0, 95.0, 90.0, 95.0, 92.0, 83.0, 91.0, 92.0, 93.0, 92.0, 92.0, 85.0, 87.0, 158.0]
-
-tiempo = []
-datos_iteracion = []
-
-
 
 
 for i in range(10):

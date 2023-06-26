@@ -1,11 +1,13 @@
 import simpy
 import random
 import pandas as pd
+import numpy as np
 
 from .hiperparametros import Hiperparametros
 from .corte_guarnicion import Corte_Guarnicion
 from .suela_plantilla import Suela_Plantilla
 from .calzado import Calzado
+from .estadisticos import crear_df_pivote,estadisticos
 
 
 
@@ -73,7 +75,10 @@ class Simulacion_calzado():
 
   def get_indice(self):
 
-    indice = self.tiempo_colas  / (self.tiempo_colas + self.tiempo_proceso )
+    df_orden = pd.DataFrame(self.orden_corte)[["id","cantidad"]]
+    arreglo_estadisticos = estadisticos(self.df_metricas,df_orden)
+
+    indice = np.nanmean(arreglo_estadisticos[3])
     return indice
 
   def agregar_metricas(self,actividad):

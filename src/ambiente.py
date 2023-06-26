@@ -4,6 +4,7 @@ Funciones necesarias para comprobar el ambiente de simulacion
 import yaml
 from orden import Generador_ordenes
 from ambiente import validar_ambiente
+from simulacion import Simulacion_calzado
 
 jornada = 9.5
 
@@ -26,8 +27,21 @@ for i in range(1):
         orden_prueba.append((i+1,2))
 
 orden_real_1 = [(1,2),(2,1),(3,2),(4,1)]
-
-
 orden.actualizar_orden(orden_prueba)
 
-validar_ambiente(orden)
+
+#validar_ambiente(orden)
+
+
+simulacion = Simulacion_calzado(
+            orden.orden_corte,
+            orden.orden_suela,
+            orden.orden_plantilla,
+            orden.df_estilo
+)
+    
+simulacion.generar_simulacion()
+
+print(simulacion.get_indice())
+
+
