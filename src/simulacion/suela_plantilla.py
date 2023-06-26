@@ -80,5 +80,5 @@ class Suela_Plantilla():
       self.df_metricas = self.df_metricas.append(df_tmp)
 
       if self.pipe != {}:
-        data = (self.tipo,id_producto,cantidad,id_actividad)
+        data = (self.tipo,int(id_producto),cantidad,id_actividad)
         self.pipe.put(data)
