@@ -12,17 +12,19 @@ class Calzado_env(gym.Env):
 
     metadata = {"render.modes": ["human"]}
 
-    def __init__(self, orden):
+    def __init__(self, orden,hiperparametros):
         super().__init__()
         self.action_space = spaces.Discrete(24)
         self.observation_space = spaces.Box(low=0, high=60,
-                                            shape=(4,), dtype=np.float64)
+                                            shape=(9,), dtype=np.float64)
         
         self.simulacion = []
         self.pasos = 0
         self.pasos_maximos = 4
         self.orden = orden
         self.diccionario_acciones = self.get_diccionario_acciones()
+
+        self.hiperparametros = hiperparametros
 
     def get_diccionario_acciones(self):
       arreglo_indices = range(self.pasos_maximos)
@@ -51,8 +53,13 @@ class Calzado_env(gym.Env):
 
       self.simulacion.generar_simulacion()
       info = {"paso" : self.pasos , "accion" : action}
+
       self.reward = (1 /  self.simulacion.get_indice())
-      self.observation = np.array([dato[1] for dato in self.orden.orden])
+
+
+      observation_orden = [dato[1] for dato in self.orden.orden]
+      self.observation = np.concatenate((observation_orden,self.hiperparametros))
+
       if self.simulacion.get_indice() > parametros.indice_minimo :
         self.done = True
       else :
@@ -65,5 +72,8 @@ class Calzado_env(gym.Env):
       self.orden.orden = self.orden.generar_datos()
       self.orden.run()
       self.pasos = 0
-      self.observation = np.array([dato[1] for dato in self.orden.orden])
+
+      observation_orden = [dato[1] for dato in self.orden.orden]
+      self.observation = np.concatenate((observation_orden,self.hiperparametros))
+      
       return self.observation  

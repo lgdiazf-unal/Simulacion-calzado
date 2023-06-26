@@ -8,8 +8,8 @@ class Hiperparametros():
   # intervalo entre corte y corte
   intervalo_corte = 1 
   # datos para calcular el area de la lamina de cuero
-  area_media = 85
-  area_desv = 2
+  area_media = 84.83
+  area_desv = 1.86
   intervalo_cambio_laminas = 0.5
   # Suela
   cantidad_lineas_produccion_suela = 1

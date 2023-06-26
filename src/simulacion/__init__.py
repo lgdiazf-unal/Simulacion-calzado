@@ -4,3 +4,4 @@ from simulacion.corte_guarnicion import Corte_Guarnicion
 from simulacion.simulacion_calzado import Simulacion_calzado
 from simulacion.calzado import Calzado
 from simulacion.estadisticos import crear_df_pivote, estadisticos
+from simulacion.hiperparametros import Hiperparametros
