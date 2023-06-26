@@ -25,7 +25,7 @@ orden =  Generador_ordenes(path_estilo,path_suela,path_plantilla)
 
 orden_prueba = []
 
-for i in range(230):
+for i in range(1):
     for i in range(4):
         orden_prueba.append((i+1,2))
 
