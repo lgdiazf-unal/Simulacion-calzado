@@ -34,9 +34,7 @@ class Calzado():
     inicio = self.env.now
 
     yield self.finalizacion_B
-
-    print("incicio corte" , self.env.now)
-
+    
     with self.zapateros.request() as req: 
       yield req
 

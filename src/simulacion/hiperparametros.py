@@ -16,6 +16,6 @@ class Hiperparametros():
   # Plantilla
   cantidad_lineas_produccion_plantilla = 1
   # calzado
-  cantidad_zapateros = 20
+  cantidad_zapateros = 15
   # Semilla random
   semilla = 42

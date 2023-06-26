@@ -25,7 +25,7 @@ orden =  Generador_ordenes(path_estilo,path_suela,path_plantilla)
 
 orden_prueba = []
 
-for i in range(212):
+for i in range(230):
     for i in range(4):
         orden_prueba.append((i+1,2))
 
@@ -106,7 +106,7 @@ def evaluar_simulacion(datos_reales,datos_simulacion):
     print(ttest_ind(datos_reales, datos_simulacion))
     
 
-reales = [84,51,142,209,227,335,201,273,134,14,9,8]
+reales = [67.0, 93.0, 86.0, 90.0, 92.0, 85.0, 82.0, 95.0, 90.0, 95.0, 92.0, 83.0, 91.0, 92.0, 93.0, 92.0, 92.0, 85.0, 87.0, 158.0]
 
 tiempo = []
 datos_iteracion = []
@@ -114,15 +114,15 @@ datos_iteracion = []
 
 
 
-for i in range(5):
+for i in range(10):
+
     simulacion = Simulacion_calzado(
             orden.orden_corte,
             orden.orden_suela,
             orden.orden_plantilla,
             orden.df_estilo
     )
-
-
+    
     simulacion.generar_simulacion()
     df_metrica = simulacion.df_metricas
     df_finalizados  = simulacion.df_finalizados
@@ -149,7 +149,7 @@ for i in range(5):
 
     #print(f"pares realizados {np.mean(datos_iteracion)} con {np.std(datos_iteracion)} en {len(datos_iteracion)} dias")
     evaluar_simulacion(reales,datos)
-    print("-*-*-*-*-*-*-*-*",datos)
+    print(datos)
 
     # a_t = df_finalizados["tiempo"].values
 
