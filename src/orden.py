@@ -25,7 +25,7 @@ orden =  Generador_ordenes(path_estilo,path_suela,path_plantilla)
 
 orden_prueba = []
 
-for i in range(150):
+for i in range(212):
     for i in range(4):
         orden_prueba.append((i+1,2))
 
@@ -114,60 +114,61 @@ datos_iteracion = []
 
 
 
-simulacion = Simulacion_calzado(
-        orden.orden_corte,
-        orden.orden_suela,
-        orden.orden_plantilla,
-        orden.df_estilo
-)
+for i in range(5):
+    simulacion = Simulacion_calzado(
+            orden.orden_corte,
+            orden.orden_suela,
+            orden.orden_plantilla,
+            orden.df_estilo
+    )
 
 
-simulacion.generar_simulacion()
-df_metrica = simulacion.df_metricas
-df_finalizados  = simulacion.df_finalizados
-
-
-
-
-
-#print(df_finalizados.describe())
-
-#print(tiempo.append(df_metrica["fin"].max()/60))
-
-df_finalizados["dias"] = ""
-df_finalizados["dias"] = df_finalizados.apply(lambda row : math.ceil((row["tiempo"]/(60*jornada))), axis=1)
-
-datos = []
-
-for i,j in df_finalizados.groupby("dias"):
-    datos_iteracion.append(j['dias'].count())
-    datos.append(j['dias'].count())
-    #print(f"{i} : {j['dias'].count()}")
-
-#print(f"iteracion pares realizados {np.mean(datos)} con {np.std(datos)} en {len(datos)} dias")
-
-#print(f"pares realizados {np.mean(datos_iteracion)} con {np.std(datos_iteracion)} en {len(datos_iteracion)} dias")
-evaluar_simulacion(reales,datos)
-print(datos)
-
-# a_t = df_finalizados["tiempo"].values
-
-# for i in range(len(a_t)-1):
-#     print(f"tiempo muerto  : {a_t[i+1] - a_t[i]}")
-
-#print(simulacion.df_finalizados)
-
-df_orden = pd.DataFrame(orden.orden_corte)[["id","cantidad"]]
-estadisticos(df_metrica,df_orden)
-
-
-
-# print(f"media {np.mean(tiempo)} std {np.std(tiempo)}")
+    simulacion.generar_simulacion()
+    df_metrica = simulacion.df_metricas
+    df_finalizados  = simulacion.df_finalizados
 
 
 
 
-    
+
+    #print(df_finalizados.describe())
+
+    #print(tiempo.append(df_metrica["fin"].max()/60))
+
+    df_finalizados["dias"] = ""
+    df_finalizados["dias"] = df_finalizados.apply(lambda row : math.ceil((row["tiempo"]/(60*jornada))), axis=1)
+
+    datos = []
+
+    for i,j in df_finalizados.groupby("dias"):
+        datos_iteracion.append(j['dias'].count())
+        datos.append(j['dias'].count())
+        #print(f"{i} : {j['dias'].count()}")
+
+    #print(f"iteracion pares realizados {np.mean(datos)} con {np.std(datos)} en {len(datos)} dias")
+
+    #print(f"pares realizados {np.mean(datos_iteracion)} con {np.std(datos_iteracion)} en {len(datos_iteracion)} dias")
+    evaluar_simulacion(reales,datos)
+    print("-*-*-*-*-*-*-*-*",datos)
+
+    # a_t = df_finalizados["tiempo"].values
+
+    # for i in range(len(a_t)-1):
+    #     print(f"tiempo muerto  : {a_t[i+1] - a_t[i]}")
+
+    #print(simulacion.df_finalizados)
+
+    df_orden = pd.DataFrame(orden.orden_corte)[["id","cantidad"]]
+    #estadisticos(df_metrica,df_orden)
+
+
+
+    # print(f"media {np.mean(tiempo)} std {np.std(tiempo)}")
+
+
+
+
+        
 
 
 

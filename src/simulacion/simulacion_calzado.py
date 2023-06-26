@@ -45,14 +45,18 @@ class Simulacion_calzado():
     self.tiempo_colas = 0
     self.tiempo_proceso = 0
 
+    self.finalizacion_A = self.env.event()
+    self.finalizacion_B = self.env.event()
+
   def generar_simulacion(self):
     actividades = [
         Corte_Guarnicion(self.env,self.orden_corte,self.df_metricas,self.pipe,self.estado),
-        Suela_Plantilla(self.env,self.orden_suela,2,self.capacidad_suela,self.df_metricas,self.pipe),
-        Suela_Plantilla(self.env,self.orden_plantilla,3,self.capacidad_plantilla,self.df_metricas,self.pipe),
-        Calzado(self.env,self.df_metricas,self.df_finalizados,self.df_estilo,self.pipe)
+        Suela_Plantilla(self.env,self.orden_suela,2,self.capacidad_suela,self.df_metricas,self.pipe,self.finalizacion_A),
+        Suela_Plantilla(self.env,self.orden_plantilla,3,self.capacidad_plantilla,self.df_metricas,self.pipe,self.finalizacion_B),
+        Calzado(self.env,self.df_metricas,self.df_finalizados,self.df_estilo,self.pipe,self.finalizacion_A,self.finalizacion_B)
     ]
     _ = [actividad.agregar_simulacion() for actividad in actividades]
+
 
     self.env.run()
 

@@ -8,13 +8,15 @@ Clase para simular el proceso de las plantillas y suelas
 
 class Suela_Plantilla():
 
-  def __init__(self,env,ordenes,tipo,capacidad,df_metricas,pipe={}):
+  def __init__(self,env,ordenes,tipo,capacidad,df_metricas,pipe={},finalizacion_B={}):
 
     self.env = env
     self.df_metricas = df_metricas
     self.ordenes = ordenes 
     self.tipo = tipo
     self.capacidad = capacidad
+
+    self.finalizacion_B = finalizacion_B
 
     self.tiempo_colas = 0
     self.tiempo_proceso = 0 
@@ -26,6 +28,7 @@ class Suela_Plantilla():
     _ = [
         self.env.process(self.generador_actividad(orden)) for orden in self.ordenes
         ]
+    self.finalizacion_B.succeed()
 
   def generador_actividad(self,orden):
 

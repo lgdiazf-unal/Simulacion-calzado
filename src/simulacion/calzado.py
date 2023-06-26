@@ -7,11 +7,14 @@ import simpy
 class Calzado():
 
 
-  def __init__(self,env,df_metricas,df_finalizados,df_estilo,pipe):
+  def __init__(self,env,df_metricas,df_finalizados,df_estilo,pipe,finalizacion_A,finalizacion_B):
 
     self.env = env
     self.df_estilo = df_estilo 
     self.df_finalizados = df_finalizados
+
+    self.finalizacion_A = finalizacion_A
+    self.finalizacion_B = finalizacion_B
 
     self.pipe = pipe
     self.df_metricas = df_metricas
@@ -29,6 +32,10 @@ class Calzado():
   def generador_calzado(self,tiempo,id,tiempo_cola,cantidad):
 
     inicio = self.env.now
+
+    yield self.finalizacion_B
+
+    print("incicio corte" , self.env.now)
 
     with self.zapateros.request() as req: 
       yield req
