@@ -39,11 +39,14 @@ class Almacen():
 
     
   def validar_completo(self):
+
+
     
     if 1 in self.almacen:
       
 
       # recorrer los estilos de guarnicion
+ 
       for i in self.almacen[1]:
         if self.almacen[1][i] != []:
 
@@ -80,5 +83,6 @@ class Almacen():
                 self.eliminar_estilos_vacios(i)
               
                 return (proceso,tiempo_cola,cantidad_solicitada) 
+      
+     
     return (0,0,0)
-

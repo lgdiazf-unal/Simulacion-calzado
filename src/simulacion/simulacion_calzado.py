@@ -32,18 +32,9 @@ class Simulacion_calzado():
     self.df_metricas["fin"] = []
     self.df_metricas["tiempo_proceso"] = []
 
-
-    self.df_estado = pd.DataFrame()
-    self.df_estado["fecha"] = []
-    self.df_estado["corte"] = []
-    self.df_estado["guarnicion"] = []
-    self.df_estado["suela"] = []
-    self.df_estado["plantilla"] = []
-    self.df_estado["zapato"] = []
-
     self.df_finalizados = pd.DataFrame()
-    self.df_estado["tiempo"] = []
-    self.df_estado["id_orden"] = []
+    self.df_finalizados["tiempo"] = []
+    self.df_finalizados["id_orden"] = []
 
 
     self.pipe = simpy.Store(self.env)
@@ -56,10 +47,10 @@ class Simulacion_calzado():
 
   def generar_simulacion(self):
     actividades = [
-        Corte_Guarnicion(self.env,self.orden_corte,self.df_metricas,self.df_estado,self.pipe,self.estado),
-        Suela_Plantilla(self.env,self.orden_suela,2,self.capacidad_suela,self.df_metricas,self.df_estado,self.pipe,self.estado),
-        Suela_Plantilla(self.env,self.orden_plantilla,3,self.capacidad_plantilla,self.df_metricas,self.df_estado,self.pipe,self.estado),
-        Calzado(self.env,self.df_metricas,self.df_estado,self.df_finalizados,self.df_estilo,self.pipe,self.estado)
+        Corte_Guarnicion(self.env,self.orden_corte,self.df_metricas,self.pipe,self.estado),
+        Suela_Plantilla(self.env,self.orden_suela,2,self.capacidad_suela,self.df_metricas,self.pipe),
+        Suela_Plantilla(self.env,self.orden_plantilla,3,self.capacidad_plantilla,self.df_metricas,self.pipe),
+        Calzado(self.env,self.df_metricas,self.df_finalizados,self.df_estilo,self.pipe)
     ]
     _ = [actividad.agregar_simulacion() for actividad in actividades]
 
@@ -83,4 +74,3 @@ class Simulacion_calzado():
 
   def agregar_metricas(self,actividad):
     self.df_metricas = self.df_metricas.append(actividad.df_metricas)
-    self.df_estado = self.df_estado.append(actividad.df_estado)

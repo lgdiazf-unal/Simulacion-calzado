@@ -6,11 +6,9 @@ from scipy.stats import norm
 from .hiperparametros import Hiperparametros
 
 class Corte_Guarnicion():
-  def __init__(self,env,cortes,df_metricas,df_estado,pipe={},estado={}):
+  def __init__(self,env,cortes,df_metricas,pipe={},estado={}):
 
     self.df_metricas = df_metricas
-    self.df_estado = df_estado
-
     self.env = env
 
     self.cortadores = simpy.Resource(
@@ -155,14 +153,10 @@ class Corte_Guarnicion():
         "tiempo_proceso" : [tiempo_total]
         })
       
-      df_tmp_estado = pd.DataFrame({
-        "fecha" : [self.env.now],
-        "tipo" : [1],
-        "cantidad" : [1]
-      })
+
 
       self.df_metricas = self.df_metricas.append(df_tmp)
-      self.df_estado = self.df_estado.append(df_tmp_estado)
+      
 
       g = self.generador_guarnicion(corte["guarnicion_media"],corte["guarnicion_desv"],cantidad,estilo,corte["id"])
       self.env.process(g)
@@ -194,7 +188,7 @@ class Corte_Guarnicion():
       })
 
       self.df_metricas = self.df_metricas.append(df_tmp)
-      self.df_estado = self.df_estado.append(df_tmp_estado)
+
 
       if self.pipe != {}:
         data = (1,estilo,cantidad,id_tarea)
