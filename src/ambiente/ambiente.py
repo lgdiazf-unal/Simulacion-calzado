@@ -5,7 +5,7 @@ import itertools
 from  simulacion  import Simulacion_calzado
 
 class parametros():
-  indice_minimo = 0.11
+  indice_minimo = 1
 
 class Calzado_env(gym.Env):
     """Custom Environment that follows gym interface."""

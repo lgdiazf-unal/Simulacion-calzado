@@ -29,8 +29,8 @@ class Generador_ordenes():
     self.id_tarea_suela = 1 
     self.id_tarea_plantilla = 1 
 
-    self.lim_inf = 18
-    self.lim_sup =  20
+    self.lim_inf = 1
+    self.lim_sup =  2
 
     # genera un arreglo con tuplas con el id del estilo y
     # la cantidad para esa actividad en especifico

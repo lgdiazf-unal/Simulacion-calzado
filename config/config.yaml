@@ -4,7 +4,7 @@ path_suela :  "./data/suela_gen copy.csv"
 path_plantilla :  "./data/plantilla_gen copy.csv"
 path_modelos : "modelos/ppo_indice_4"
 path_logs : "logs"
-nombre_modelo : "ppo_4"
+nombre_modelo : "ppo_8"
 
 
 
