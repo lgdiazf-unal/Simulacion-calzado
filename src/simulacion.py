@@ -45,8 +45,22 @@ def evaluar_simulacion(datos_reales,datos_simulacion):
     
 
 
-for i in range(10):
+def get_error(a,b):
+    arreglo1 = np.array(a)
+    arreglo2 = np.array(b)
+    max_longitud = max(len(arreglo1), len(arreglo2))
+    arreglo1 = np.resize(arreglo1, max_longitud)
+    arreglo2 = np.resize(arreglo2, max_longitud)
 
+    errores = np.abs(arreglo1 - arreglo2)
+    errores_normalizados = (errores - np.min(errores)) / (np.max(errores) - np.min(errores))
+
+    return np.mean(errores_normalizados)
+
+   # print(np.mean(errores_normalizados))
+
+
+def generar_simulacion():
     simulacion = Simulacion_calzado(
             orden.orden_corte,
             orden.orden_suela,
@@ -91,15 +105,41 @@ for i in range(10):
 
     df_orden = pd.DataFrame(orden.orden_corte)[["id","cantidad"]]
     #estadisticos(df_metrica,df_orden)
-
-
-
     # print(f"media {np.mean(tiempo)} std {np.std(tiempo)}")
 
+    return [datos,simulacion.get_indice()]
+
+
+# convergencia
 
 
 
-        
+limite = 0.0004
+
+data1  = generar_simulacion()
+indice1 = data1[1]
+
+
+for i in range(10):
+    iteracion = 1
+    while True:
+        print(f"iteracion {iteracion}")
+        data2 = generar_simulacion()
+        indice2 = data2[1]
+        error = abs(indice2-indice1)/indice2
+        print(error,limite)
+
+        if error < limite:
+            break
+
+        indice1 = indice2
+        iteracion = iteracion + 1
+
+    
+
+  
+    
+   
 
 
 
